@@ -54,13 +54,13 @@ Abra un terminal en su ordenador y siga los siguientes pasos.
 El proyecto debe clonarse en el ordenador desde el que se está trabajando con:
 
 ```
-$ git clone https://github.com/ging/bbdd-practica-odm
+$ git clone https://github.com/ebarra/nosql_odms_bdfi
 ```
 
 y entrar en el directorio de trabajo
 
 ```
-$ cd bbdd-practica-odm
+$ cd nosql_odms_bdfi
 ```
 
 Una vez dentro de la carpeta, se instalan las dependencias con:
