@@ -92,9 +92,10 @@ exports.filterPatientsByDiagnosis = async function (diagnosis) {
  */
 exports.filterPatientsBySpeacialistAndDate = async function (specialist, sDate,fDate) {
     // Se den convertir de streing a dates
-    // console.log("typeof \n \n"+ typeof sDate);
-    // console.log("typeof \n \n"+ typeof fDate);
-
+    console.log("typeof \n \n"+ typeof sDate);
+    console.log("typeof \n \n"+ typeof fDate);
+    console.log("typeof \n \n"+ typeof sDate);
+    console.log("typeof \n \n"+ typeof fDate);
     let result = await Patient.find({
         "medicalHistory.specialist": specialist,
         "date":
@@ -108,16 +109,10 @@ exports.filterPatientsBySpeacialistAndDate = async function (specialist, sDate,f
     return result;
 }
 
-/**
- * Añade un nueva consulta al historial medico del paciente representado por patientId
- * @param patientId - Id del paciente al que se le añade una nueva consulta al historial
- * @param medicalRecord - Objeto con los datos de la consulta
- * @return El objeto paciente con los datos actualizados incluido la nueva consulta
- */
 exports.addPatientHistory = async function (patientId, medicalRecord) {
-    var medicalRecordFiltered = medicalRecord;
-    medicalRecord.forEach(elm => delete elm._id)
-    console.log("medicalRecordFiltered: \n" + medicalRecordFiltered );
+    // var medicalRecordFiltered = medicalRecord;
+    //medicalRecord.forEach(elm => delete elm._id)
+    // console.log("medicalRecordFiltered: \n" + medicalRecordFiltered );
     let result = await Patient.findOneAndUpdate(
     {_id: patientId},
     {$push: { medicalHistory: medicalRecord}}
@@ -125,3 +120,10 @@ exports.addPatientHistory = async function (patientId, medicalRecord) {
     console.log("addPatientHistory: \n" + result);
     return result;
 }
+
+/**
+ * Añade un nueva consulta al historial medico del paciente representado por patientId
+ * @param patientId - Id del paciente al que se le añade una nueva consulta al historial
+ * @param medicalRecord - Objeto con los datos de la consulta
+ * @return El objeto paciente con los datos actualizados incluido la nueva consulta
+ */
