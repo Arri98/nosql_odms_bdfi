@@ -18,7 +18,7 @@ exports.list = async function() {
  */
 exports.read = async function(patientId) {
     let result = await Patient.findById(patientId);
-    console.log(result);
+    console.log("Read: \n" +result);
     return result;
 }
 
@@ -32,7 +32,7 @@ exports.create = async function(body) {
     var newPatient = new Patient(body);
     // console.log(newPatient);
     let result = await newPatient.save();
-    console.log(result);
+    console.log("Create: \n" +result);
     return result;
 }
 
@@ -46,7 +46,7 @@ exports.update= async function(patientId, body) {
     let result = await Patient.findOneAndUpdate(
     {_id: patientId}, body, {new: true}
     )
-    console.log(result);
+    console.log("Update: \n" +result);
     return result;
 }
 
@@ -57,7 +57,7 @@ exports.update= async function(patientId, body) {
  */
 exports.delete = async function(patientId) {
     let result = await Patient.deleteOne({_id: patientId})
-    console.log(result);
+    console.log("Delete: \n" +result);
     return result;
 }
 
@@ -68,7 +68,7 @@ exports.delete = async function(patientId) {
  */
 exports.filterPatientsByCity = async function (city) {
     let result = await Patient.find({city: city});
-    console.log(result);
+    console.log("filterPatientsByCity: \n" +result);
     return result;
 }
 
@@ -79,7 +79,7 @@ exports.filterPatientsByCity = async function (city) {
  */
 exports.filterPatientsByDiagnosis = async function (diagnosis) {
     let result = await Patient.find({"medicalHistory.diagnosis": { $in: diagnosis } } );
-    console.log(result);
+    console.log("filterPatientsByDiagnosis: \n" + result);
     return result;
 }
 
@@ -91,8 +91,20 @@ exports.filterPatientsByDiagnosis = async function (diagnosis) {
  * @return Un array de objetos de pacientes
  */
 exports.filterPatientsBySpeacialistAndDate = async function (specialist, sDate,fDate) {
-    let result = await Patient.find({"medicalHistory.specialist": specialist } );
-    console.log(result);
+    // Se den convertir de streing a dates
+    // console.log("typeof \n \n"+ typeof sDate);
+    // console.log("typeof \n \n"+ typeof fDate);
+
+    let result = await Patient.find({
+        "medicalHistory.specialist": specialist,
+        "date":
+            {"$gte": new Date(sDate),
+            "$lte": new Date(fDate)
+            }
+        }
+     );
+    // let result = await Patient.find({ );
+    console.log("filterPatientsBySpeacialistAndDate: \n" + result);
     return result;
 }
 
@@ -103,7 +115,13 @@ exports.filterPatientsBySpeacialistAndDate = async function (specialist, sDate,f
  * @return El objeto paciente con los datos actualizados incluido la nueva consulta
  */
 exports.addPatientHistory = async function (patientId, medicalRecord) {
-    let result = await Patient.find( { "medicalHistory.diagnosis": { $in: diagnosis } } );
-    console.log(result);
+    var medicalRecordFiltered = medicalRecord;
+    medicalRecord.forEach(elm => delete elm._id)
+    console.log("medicalRecordFiltered: \n" + medicalRecordFiltered );
+    let result = await Patient.findOneAndUpdate(
+    {_id: patientId},
+    {$push: { medicalHistory: medicalRecord}}
+    )
+    console.log("addPatientHistory: \n" + result);
     return result;
 }
