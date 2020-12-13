@@ -6,8 +6,8 @@ const Patient = require('../models/patient');
  * @return object pacients
  */
 exports.list = async function() {
-    let result = await Patients.find();
-    console.log(result);
+    let result = await Patient.find();
+    console.log("List: \n" + result);
     return result;
 }
 
@@ -17,7 +17,7 @@ exports.list = async function() {
  * @return Un objeto con todos los atributos del paciente
  */
 exports.read = async function(patientId) {
-    let result = await Patient.find(_id: patientId);
+    let result = await Patient.findById(patientId);
     console.log(result);
     return result;
 }
@@ -28,7 +28,10 @@ exports.read = async function(patientId) {
  * @return El nuevo objeto paciente creado
  */
 exports.create = async function(body) {
-    let result = await body.save();
+    // console.log(body);
+    var newPatient = new Patient(body);
+    // console.log(newPatient);
+    let result = await newPatient.save();
     console.log(result);
     return result;
 }
@@ -43,6 +46,8 @@ exports.update= async function(patientId, body) {
     let result = await Patient.findOneAndUpdate(
     {_id: patientId}, body, {new: true}
     )
+    console.log(result);
+    return result;
 }
 
 /**
@@ -51,16 +56,20 @@ exports.update= async function(patientId, body) {
  * @return El resultado de la operacion de borrado
  */
 exports.delete = async function(patientId) {
-    // Rellene aqui ...
+    let result = await Patient.deleteOne({_id: patientId})
+    console.log(result);
+    return result;
 }
 
 /**
  * Obtiene todos los pacientes de la base de datos de Mongo en base a su ciudad de origen
- * @param patientId - Id del paciente a buscar
+ * @param city - String del nombre de la ciudad
  * @return Un objeto con todos los atributos del paciente
  */
 exports.filterPatientsByCity = async function (city) {
-    // Rellene aqui ...
+    let result = await Patient.find({city: city});
+    console.log(result);
+    return result;
 }
 
 /**
@@ -69,7 +78,9 @@ exports.filterPatientsByCity = async function (city) {
  * @return Un array de objetos de pacientes
  */
 exports.filterPatientsByDiagnosis = async function (diagnosis) {
-    // Rellene aqui ...
+    let result = await Patient.find({"medicalHistory.diagnosis": { $in: diagnosis } } );
+    console.log(result);
+    return result;
 }
 
 /**
@@ -80,7 +91,9 @@ exports.filterPatientsByDiagnosis = async function (diagnosis) {
  * @return Un array de objetos de pacientes
  */
 exports.filterPatientsBySpeacialistAndDate = async function (specialist, sDate,fDate) {
-    // Rellene aqui ...
+    let result = await Patient.find({"medicalHistory.specialist": specialist } );
+    console.log(result);
+    return result;
 }
 
 /**
@@ -90,5 +103,7 @@ exports.filterPatientsBySpeacialistAndDate = async function (specialist, sDate,f
  * @return El objeto paciente con los datos actualizados incluido la nueva consulta
  */
 exports.addPatientHistory = async function (patientId, medicalRecord) {
-    // Rellene aqui ...
+    let result = await Patient.find( { "medicalHistory.diagnosis": { $in: diagnosis } } );
+    console.log(result);
+    return result;
 }
