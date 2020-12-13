@@ -75,6 +75,22 @@ Ejecutamos los seeders para añadir pacientes por defecto a la base de datos de 
 $ npm run seed
 ```
 
+=> Se espera un output parecido a este
+```
+$ npm run seed
+
+> rest_server@0.0.1 seed /home/aluche/PycharmProjects/nosql_odms_bdfi
+> md-seed run
+
+(node:6807) DeprecationWarning: current Server Discovery and Monitoring engine is deprecated, and will be removed in a future version. To use the new Server Discover and Monitoring engine, pass option { useUnifiedTopology: true } to the MongoClient constructor.
+✔ Successfully connected to MongoDB!
+
+Seeding Results:
+✔ Patients: 7
+
+✔ Done.
+```
+
 Por último podemos arrancar la práctica con:
 
 ```
@@ -82,6 +98,34 @@ $ npm start
 ```
 
 Abra un navegador y vaya a la url "http://localhost:8001" para ver la aplicación de gestión de pacientes.
+
+=> Compruébese que se crea una db bio_bbdd en mongo
+
+```
+> show dbs
+admin     0.000GB
+bio_bbdd  0.000GB
+config    0.000GB
+local     0.000GB
+> use bio_bbdd
+switched to db bio_bbdd
+> show tables
+patients
+> db.patients.findOne()
+{
+	"_id" : ObjectId("5e4a60fb7be8f229b54a16cb"),
+	"profession" : [
+		"Frutera",
+		"Monitora de tiempo libre"
+	],
+	"name" : "Ana",
+	"surname" : "Durcal",
+	"dni" : "555555",
+	"city" : "Huelva",
+	"medicalHistory" : [ ],
+	"__v" : 0
+}
+```
 
 **NOTA: Cada vez que se quiera realizar una prueba del código desarrollado, debemos parar y arrancar de nuevo la practica. Para ello, desde el terminal pulse ctrl+c para parar y arranque de nuevo con npm start**
 
