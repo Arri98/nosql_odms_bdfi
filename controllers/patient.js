@@ -92,22 +92,50 @@ exports.filterPatientsByDiagnosis = async function (diagnosis) {
  */
 exports.filterPatientsBySpeacialistAndDate = async function (specialist, sDate,fDate) {
     // Se den convertir de streing a dates
-    console.log("typeof \n \n"+ typeof sDate);
-    console.log("typeof \n \n"+ typeof fDate);
-    console.log("typeof \n \n"+ typeof sDate);
-    console.log("typeof \n \n"+ typeof fDate);
-    let result = await Patient.find({
-        "medicalHistory.specialist": specialist,
-        "date":
-            {"$gte": new Date(sDate),
-            "$lte": new Date(fDate)
+//    console.log("typeof \n \n"+ typeof sDate);
+//    console.log("typeof \n \n"+ typeof fDate);
+//    console.log("typeof \n \n"+ typeof sDate);
+//    console.log("typeof \n \n"+ typeof fDate);
+
+//    let result = await Patient.find({
+//        "medicalHistory.specialist": specialist,
+//        "date":
+//            {"$gte": new Date(sDate),
+//            "$lte": new Date(fDate)
+//            }
+//        }
+//     );
+
+    let result = await Patient.find(
+        { medicalHistory:
+            {$elemMatch:
+                {
+                specialist: specialist,
+                date: {$gte: sDate},
+                date: {$lt: fDate}
+                }
             }
         }
-     );
-    // let result = await Patient.find({ );
+    )
     console.log("filterPatientsBySpeacialistAndDate: \n" + result);
     return result;
-}
+    }
+
+//    // let result = await Patient.find({ );
+//    let result = await Patient.find(
+//        { medicalHistory:
+//            {$elemMatch:
+//                {
+//                specialist: specialist,
+//                date: {$and:
+//                    {$gte: sDate},
+//                    {$lt: fDate}
+//                    }
+//                }
+//            }
+//        }
+//    )
+
 
 exports.addPatientHistory = async function (patientId, medicalRecord) {
     // var medicalRecordFiltered = medicalRecord;
