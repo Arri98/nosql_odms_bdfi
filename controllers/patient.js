@@ -114,7 +114,8 @@ exports.addPatientHistory = async function (patientId, medicalRecord) {
     // console.log("medicalRecordFiltered: \n" + medicalRecordFiltered );
     let result = await Patient.findOneAndUpdate(
     {"_id": patientId},
-    {$push: { medicalHistory: medicalRecord}}
+    {$push: { medicalHistory: medicalRecord}},
+    {new : true}
     )
     console.log("addPatientHistory: \n" + result);
     return result;
