@@ -4,11 +4,11 @@
   "private": true,
   "disableHashCheck": true,
   "info": {
-        "githubURL": "ebarra/nosql_odms_bdfi",
-        "serverUrl": "https://autocorector.dit.upm.es/",
-        "courseId": "6851",
-        "assignmentId": "101435"
-    },
+    "githubURL": "ebarra/nosql_odms_bdfi",
+    "serverUrl": "https://autocorector.dit.upm.es/",
+    "courseId": "6851",
+    "assignmentId": "101435"
+  },
   "scripts": {
     "start": "node rest_server.js",
     "seed": "md-seed run",

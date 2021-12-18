@@ -3,13 +3,14 @@ const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const path = require('path');
 const PatientController = require('./controllers/patient');
+const config = require('./config.js');
 
 const app = express();
 
 const mongoose = require('mongoose');
 (async () => {
   try {
-    await mongoose.connect('mongodb://localhost/bio_bbdd',{ useNewUrlParser: true, useUnifiedTopology: true })
+    await mongoose.connect(config.mongo || 'mongodb://localhost:27001,localhost:27002,localhost:27003,localhost:27004/bio_bbdd?replicaSet=replica')
     console.log('Connected to Mongo!')
   } catch (err) {
     console.log('Error connecting to Database: ' + err)
@@ -35,7 +36,7 @@ app.get('/home', (req, res, next) => {
 
 app.get('/patients', async (req, res, next) => {
     let patients = await PatientController.list().catch(e => next(e));
-    res.render('index', {patients: patients, patientDeleted: req.query.patientDeleted});
+    res.render('index', {patients: patients, patientDeleted: req.query.patientDeleted, title: config.title});
 });
 app.post('/patients', async (req, res, next) => {
 	await PatientController.create(req.body).catch(e => next(e));
@@ -47,27 +48,27 @@ app.get('/patients/new', (req, res, next) => {
 
 app.post('/patients/filterByCity', async (req, res, next) => {
     let patients = await PatientController.filterPatientsByCity(req.body.city).catch(e => next(e))
-	res.render('index', {patients: patients, patientDeleted: false});
+	res.render('index', {patients: patients, patientDeleted: false, title: config.title});
 });
 
 app.post('/patients/filterByDiagnosis', async (req, res, next) => {
     let patients = await PatientController.filterPatientsByDiagnosis(req.body.diagnosis).catch(e => next(e))
-    res.render('index', {patients: patients, patientDeleted: false});
+    res.render('index', {patients: patients, patientDeleted: false, title: config.title});
 });
 
 app.post('/patients/filterByDate', async (req, res, next) => {
     let patients = await PatientController.filterPatientsBySpeacialistAndDate(req.body.specialist,req.body.start,req.body.end).catch(e => next(e))
-    res.render('index', {patients: patients, patientDeleted: false});
+    res.render('index', {patients: patients, patientDeleted: false, title: config.title});
 });
 
 app.get('/patients/:patientId', async (req, res, next) => {
 	let patient = await PatientController.read(req.params.patientId).catch(e => next(e));
-	res.render('show', {patient: patient});
+	res.render('show', {patient: patient, title: config.title});
 });
 
 app.put('/patients/:patientId', async (req, res, next) => {
 	let patient = await PatientController.update(req.params.patientId, req.body).catch(e => next(e));
-	res.render('show', {patient: patient});
+	res.render('show', {patient: patient, title: config.title});
 });
 
 app.delete('/patients/:patientId', async (req, res, next) => {
@@ -83,19 +84,19 @@ app.get('/patients/:patientId/edit', (req, res, next) => {
 		dni: req.query.dni,
 		city: req.query.city
 	}
-	res.render('edit', {patient: patientToEdit});
+	res.render('edit', {patient: patientToEdit, title: config.title});
 });
 
 app.get('/patients/:patientId/history', async (req, res, next) => {
 	let patientToEditHistory = {
 		id: req.params.patientId
 	}
-    res.render('history', { patient: patientToEditHistory });
+    res.render('history', { patient: patientToEditHistory, title: config.title });
 });
 
 app.put('/patients/:patientId/history', async (req, res, next) => {
     let patient = await PatientController.addPatientHistory(req.params.patientId, req.body).catch(e => next(e))
-    res.render('show', {patient: patient});
+    res.render('show', {patient: patient, title: config.title});
 });
 
 

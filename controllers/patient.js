@@ -2,37 +2,39 @@
 const Patient = require('../models/patient');
 
 exports.list = async function() {
-    // Rellene aqui ...
+    return await Patient.find();
 }
 
 exports.read = async function(patientId) {
-    // Rellene aqui ...
+    return await Patient.findOne({_id: patientId});
 }
 
 exports.create = async function(body) {
-    // Rellene aqui ...
+    return await Patient.create(body);
 }
 
 exports.update= async function(patientId, body) {
-    // Rellene aqui ...
+     return await Patient.findOneAndUpdate({_id: patientId},body,{ new: true });
 }
 
 exports.delete = async function(patientId) {
-    // Rellene aqui ...
+   return await Patient.findOneAndRemove({_id: patientId});
 }
 
 exports.filterPatientsByCity = async function (city) {
-    // Rellene aqui ...
+    return await Patient.find({city: city});
 }
 
 exports.filterPatientsByDiagnosis = async function (diagnosis) {
-    // Rellene aqui ...
+    return await Patient.find({'medicalHistory.diagnosis':diagnosis});
 }
 
 exports.filterPatientsBySpeacialistAndDate = async function (specialist, sDate,fDate) {
-    // Rellene aqui ...
+    //Patient.findOne({'medicalHistory':{$and:[{specialist: specialist} ,{date:{$and:[{$gt:sDate},{$lt:fDate}]}}]}});
+    let a = await Patient.findOne()
+    return [a];
 }
 
 exports.addPatientHistory = async function (patientId, medicalRecord) {
-    // Rellene aqui ...
+    return await Patient.findOneAndUpdate({_id: patientId}, {$push: {medicalHistory:medicalRecord}}, {new:true}).exec();
 }
